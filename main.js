@@ -7,56 +7,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const pixelateButton = document.getElementById('pixelateButton');
     const replaceWithNumbersButton = document.getElementById('replaceWithNumbersButton');
     const downloadButton = document.getElementById('downloadButton');
+    const setColorsButton = document.getElementById('setColorsButton');
     let originalImageData;
     let currentImageData;
     let img = new Image();
 
-    const colorPalette = [
-        { r: 0, g: 0, b: 0 },      // Negro
-        { r: 255, g: 255, b: 255 }, // Blanco
-        { r: 255, g: 0, b: 0 },     // Rojo
-        { r: 255, g: 127, b: 0 },   // Naranja
-        { r: 255, g: 255, b: 0 },   // Amarillo
-        { r: 0, g: 255, b: 0 },     // Verde
-        { r: 0, g: 255, b: 255 },   // Cian
-        { r: 0, g: 0, b: 255 },     // Azul
-        { r: 70, g: 130, b: 180 },  // Azul acero
-        { r: 135, g: 206, b: 235 }, // Azul cielo
-        { r: 0, g: 0, b: 139 },     // Azul oscuro
-        { r: 123, g: 104, b: 238 }, // Lila medio
-        { r: 75, g: 0, b: 130 },    // Índigo
-        { r: 138, g: 43, b: 226 },  // Violeta
-        { r: 148, g: 0, b: 211 },   // Violeta oscuro
-        { r: 255, g: 0, b: 255 },   // Magenta
-        { r: 199, g: 21, b: 133 },  // Rojo púrpura
-        { r: 255, g: 182, b: 193 }, // Rosa claro
-        { r: 128, g: 0, b: 0 },     // Marrón oscuro
-        { r: 139, g: 69, b: 19 },   // Marrón
-        { r: 255, g: 228, b: 181 }, // Mocasín
-        { r: 128, g: 128, g: 128 }, // Gris
-        { r: 211, g: 211, b: 211 }, // Gris claro
-        { r: 230, g: 230, b: 250 }, // Lavanda
-        { r: 128, g: 128, b: 0 }    // Oliva
-    ];
-
-    const basicColorPalette = [
-        { r: 0, g: 0, b: 0 },      // Negro
-        { r: 255, g: 255, b: 255 }, // Blanco
-        { r: 255, g: 0, b: 0 },     // Rojo
-        { r: 255, g: 255, b: 0 },   // Amarillo
-        { r: 0, g: 255, b: 0 },     // Verde
-        { r: 0, g: 255, b: 255 },   // Cian
-        { r: 0, g: 0, b: 255 },     // Azul
-        { r: 255, g: 0, b: 255 },   // Magenta
-        { r: 128, g: 0, b: 0 },     // Marrón
-        { r: 128, g: 128, b: 0 },   // Oliva
-        { r: 128, g: 128, b: 128 }, // Gris
-        { r: 192, g: 192, b: 192 }, // Gris claro
-        { r: 0, g: 128, b: 128 },   // Teal
-        { r: 128, g: 0, b: 128 },   // Púrpura
-        { r: 255, g: 165, b: 0 },   // Naranja
-        { r: 255, g: 192, b: 203 }  // Rosa
-    ];
+    let colorPalette = [];
 
     fileInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
@@ -82,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     processButton.addEventListener('click', function () {
         if (!currentImageData) return;
-        currentImageData = reduceColors(currentImageData, colorPalette); // reduce a 25 colores
+        currentImageData = reduceColors(currentImageData, colorPalette); // reduce a los colores definidos
         ctx.putImageData(currentImageData, 0, 0);
     });
 
@@ -102,6 +58,17 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     downloadButton.addEventListener('click', downloadImage);
+
+    setColorsButton.addEventListener('click', function () {
+        colorPalette = [];
+        for (let i = 1; i <= 16; i++) {
+            const colorInput = document.getElementById(`colorInput${i}`).value.trim();
+            if (colorInput) {
+                const color = parseRgb(colorInput);
+                colorPalette.push({ ...color, number: i });
+            }
+        }
+    });
 
     function reduceColors(imageData, palette) {
         const data = imageData.data;
@@ -220,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const fontSize = Math.min(width, height) * 0.4;
                 ctx.font = `${fontSize}px Arial`;
-                ctx.fillStyle = colorNumber === 0 ? 'white' : 'black'; // Texto blanco para el color negro
+                ctx.fillStyle = colorNumber === 0 ? 'white' : 'black';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillText(colorNumber, x + width / 2, y + height / 2);
@@ -240,8 +207,13 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getColorNumber(color) {
-        const nearestColor = findNearestColor(color.r, color.g, color.b, basicColorPalette);
-        return basicColorPalette.indexOf(nearestColor);
+        const nearestColor = findNearestColor(color.r, color.g, color.b, colorPalette);
+        return colorPalette.find(c => c === nearestColor).number;
+    }
+
+    function parseRgb(rgbString) {
+        const [r, g, b] = rgbString.match(/\d+/g).map(Number);
+        return { r, g, b };
     }
 
     function downloadImage() {

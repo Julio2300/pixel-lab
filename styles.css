@@ -75,3 +75,26 @@ label[for="pixelSize"] {
     padding: 8px 16px; 
     border-radius: 4px; 
 }
+
+#controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#controls input,
+#controls button {
+    margin: 0;
+}
+
+#colorInputs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.colorInputWrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
