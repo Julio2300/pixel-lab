@@ -8,32 +8,54 @@ document.addEventListener('DOMContentLoaded', function () {
     const replaceWithNumbersButton = document.getElementById('replaceWithNumbersButton');
     const downloadButton = document.getElementById('downloadButton');
     let originalImageData;
-    let reducedImageData;
-    let pixelatedImageData;
+    let currentImageData;
     let img = new Image();
 
-    // Paleta de colores ampliada
     const colorPalette = [
-        { r: 0, g: 0, b: 0 }, { r: 255, g: 255, b: 255 },
-        { r: 255, g: 0, b: 0 }, { r: 255, g: 127, b: 0 }, { r: 255, g: 255, b: 0 },
-        { r: 0, g: 255, b: 0 }, { r: 0, g: 255, b: 127 }, { r: 0, g: 255, b: 255 },
-        { r: 0, g: 127, b: 255 }, { r: 0, g: 0, b: 255 }, { r: 127, g: 0, b: 255 },
-        { r: 255, g: 0, b: 255 }, { r: 255, g: 0, b: 127 }, { r: 192, g: 192, b: 192 },
-        { r: 128, g: 128, b: 128 }, { r: 128, g: 0, b: 0 }, { r: 128, g: 128, b: 0 },
-        { r: 0, g: 128, b: 0 }, { r: 128, g: 0, b: 128 }, { r: 0, g: 128, b: 128 },
-        { r: 0, g: 0, b: 128 }, { r: 255, g: 69, b: 0 }, { r: 255, g: 165, b: 0 },
-        { r: 255, g: 215, b: 0 }, { r: 173, g: 255, b: 47 }, { r: 0, g: 255, b: 127 },
-        { r: 0, g: 206, b: 209 }, { r: 0, g: 191, b: 255 }, { r: 70, g: 130, b: 180 },
-        { r: 147, g: 112, b: 219 }, { r: 199, g: 21, b: 133 },
-        // Additional colors for better color representation
-        { r: 255, g: 182, b: 193 }, { r: 255, g: 228, b: 225 }, { r: 255, g: 240, b: 245 },
-        { r: 240, g: 248, b: 255 }, { r: 230, g: 230, b: 250 }, { r: 245, g: 245, b: 220 },
-        { r: 255, g: 228, b: 181 }, { r: 255, g: 222, b: 173 }, { r: 255, g: 218, b: 185 },
-        { r: 255, g: 228, b: 196 }, { r: 255, g: 235, b: 205 }, { r: 245, g: 222, b: 179 },
-        { r: 255, g: 250, b: 205 }, { r: 250, g: 250, b: 210 }, { r: 255, g: 255, b: 224 },
-        { r: 255, g: 250, b: 240 }, { r: 255, g: 245, b: 238 }, { r: 245, g: 255, b: 250 },
-        { r: 240, g: 255, b: 240 }, { r: 240, g: 255, b: 255 }, { r: 230, g: 255, b: 255 },
-        { r: 240, g: 248, b: 255 }, { r: 230, g: 230, b: 250 }
+        { r: 0, g: 0, b: 0 },      // Negro
+        { r: 255, g: 255, b: 255 }, // Blanco
+        { r: 255, g: 0, b: 0 },     // Rojo
+        { r: 255, g: 127, b: 0 },   // Naranja
+        { r: 255, g: 255, b: 0 },   // Amarillo
+        { r: 0, g: 255, b: 0 },     // Verde
+        { r: 0, g: 255, b: 255 },   // Cian
+        { r: 0, g: 0, b: 255 },     // Azul
+        { r: 70, g: 130, b: 180 },  // Azul acero
+        { r: 135, g: 206, b: 235 }, // Azul cielo
+        { r: 0, g: 0, b: 139 },     // Azul oscuro
+        { r: 123, g: 104, b: 238 }, // Lila medio
+        { r: 75, g: 0, b: 130 },    // Índigo
+        { r: 138, g: 43, b: 226 },  // Violeta
+        { r: 148, g: 0, b: 211 },   // Violeta oscuro
+        { r: 255, g: 0, b: 255 },   // Magenta
+        { r: 199, g: 21, b: 133 },  // Rojo púrpura
+        { r: 255, g: 182, b: 193 }, // Rosa claro
+        { r: 128, g: 0, b: 0 },     // Marrón oscuro
+        { r: 139, g: 69, b: 19 },   // Marrón
+        { r: 255, g: 228, b: 181 }, // Mocasín
+        { r: 128, g: 128, g: 128 }, // Gris
+        { r: 211, g: 211, b: 211 }, // Gris claro
+        { r: 230, g: 230, b: 250 }, // Lavanda
+        { r: 128, g: 128, b: 0 }    // Oliva
+    ];
+
+    const basicColorPalette = [
+        { r: 0, g: 0, b: 0 },      // Negro
+        { r: 255, g: 255, b: 255 }, // Blanco
+        { r: 255, g: 0, b: 0 },     // Rojo
+        { r: 255, g: 255, b: 0 },   // Amarillo
+        { r: 0, g: 255, b: 0 },     // Verde
+        { r: 0, g: 255, b: 255 },   // Cian
+        { r: 0, g: 0, b: 255 },     // Azul
+        { r: 255, g: 0, b: 255 },   // Magenta
+        { r: 128, g: 0, b: 0 },     // Marrón
+        { r: 128, g: 128, b: 0 },   // Oliva
+        { r: 128, g: 128, b: 128 }, // Gris
+        { r: 192, g: 192, b: 192 }, // Gris claro
+        { r: 0, g: 128, b: 128 },   // Teal
+        { r: 128, g: 0, b: 128 },   // Púrpura
+        { r: 255, g: 165, b: 0 },   // Naranja
+        { r: 255, g: 192, b: 203 }  // Rosa
     ];
 
     fileInput.addEventListener('change', function (event) {
@@ -47,7 +69,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
                 originalImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                currentImageData = new ImageData(new Uint8ClampedArray(originalImageData.data), originalImageData.width, originalImageData.height);
                 processButton.removeAttribute('disabled');
+                pixelateButton.removeAttribute('disabled');
+                replaceWithNumbersButton.removeAttribute('disabled');
+                downloadButton.removeAttribute('disabled'); // Habilitar el botón de descarga
             };
             img.src = e.target.result;
         };
@@ -55,29 +81,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     processButton.addEventListener('click', function () {
-        if (!originalImageData) return;
-
-        reducedImageData = reduceColors(originalImageData, colorPalette);
-        ctx.putImageData(reducedImageData, 0, 0);
-        pixelateButton.removeAttribute('disabled');
+        if (!currentImageData) return;
+        currentImageData = reduceColors(currentImageData, colorPalette); // reduce a 25 colores
+        ctx.putImageData(currentImageData, 0, 0);
     });
 
     pixelateButton.addEventListener('click', function () {
-        if (!reducedImageData) return;
-
+        if (!currentImageData) return;
         const pixelSize = parseInt(pixelSizeInput.value);
-        pixelatedImageData = pixelateImage(ctx, canvas, reducedImageData, pixelSize);
-        ctx.putImageData(pixelatedImageData, 0, 0);
-        replaceWithNumbersButton.removeAttribute('disabled');
+        currentImageData = pixelateImage(ctx, canvas, currentImageData, pixelSize);
+        ctx.putImageData(currentImageData, 0, 0);
     });
 
     replaceWithNumbersButton.addEventListener('click', function () {
-        if (!pixelatedImageData) return;
-
+        if (!currentImageData) return;
         const pixelSize = parseInt(pixelSizeInput.value);
         const cols = Math.floor(canvas.width / pixelSize);
         const rows = Math.floor(canvas.height / pixelSize);
-        divideImage(cols, rows, pixelatedImageData, pixelSize);
+        divideImage(cols, rows, currentImageData, pixelSize);
     });
 
     downloadButton.addEventListener('click', downloadImage);
@@ -189,10 +210,6 @@ document.addEventListener('DOMContentLoaded', function () {
             ctx.stroke();
         }
 
-        ctx.fillStyle = 'black';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-
         for (let i = 0; i < cols; i++) {
             for (let j = 0; j < rows; j++) {
                 const x = i * width;
@@ -203,6 +220,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const fontSize = Math.min(width, height) * 0.4;
                 ctx.font = `${fontSize}px Arial`;
+                ctx.fillStyle = colorNumber === 0 ? 'white' : 'black'; // Texto blanco para el color negro
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
                 ctx.fillText(colorNumber, x + width / 2, y + height / 2);
             }
         }
@@ -220,9 +240,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getColorNumber(color) {
-        const paletteColors = colorPalette.map((c, index) => ({ ...c, index }));
-        const nearestColor = findNearestColor(color.r, color.g, color.b, paletteColors);
-        return nearestColor.index;
+        const nearestColor = findNearestColor(color.r, color.g, color.b, basicColorPalette);
+        return basicColorPalette.indexOf(nearestColor);
     }
 
     function downloadImage() {
@@ -232,4 +251,3 @@ document.addEventListener('DOMContentLoaded', function () {
         link.click();
     }
 });
-

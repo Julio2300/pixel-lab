@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <title>Pixelar Imagen y agregar números</title>
     <style>
         #canvas {
@@ -11,22 +12,24 @@
             width: 100%;
             height: auto;
         }
-
-
     </style>
 </head>
 <body>
-    <div><h1>Pixel Lab</h1></div>
-    <div>
-        <input type="file" id="fileInput"/>
-    <label for="pixelSize">Tamaño de píxel:</label>
-    <input type="number" id="pixelSize" name="pixelSize" min="1" value="10">
-    <button id="processButton" disabled>Procesar</button>
-    <button id="pixelateButton" disabled>Pixelar</button>
-    <button id="replaceWithNumbersButton" disabled>Reemplazar con Números</button>
-    <button id="downloadButton">Descargar Imagen</button>
-    <canvas id="canvas"></canvas>
-    </div>
+    <header>
+        <h1>Pixel Lab</h1>
+    </header>
+    <main>
+        <div>
+            <input type="file" id="fileInput"/>
+            <label for="pixelSize">Tamaño de píxel:</label>
+            <input type="number" id="pixelSize" name="pixelSize" min="1" value="10">
+            <button id="processButton" disabled>Procesar</button>
+            <button id="pixelateButton" disabled>Pixelar</button>
+            <button id="replaceWithNumbersButton" disabled>Reemplazar con Números</button>
+            <button id="downloadButton" disabled>Descargar Imagen</button>
+            <canvas id="canvas"></canvas>
+        </div>
+    </main>
     <script src="main.js"></script>
 </body>
 </html>
