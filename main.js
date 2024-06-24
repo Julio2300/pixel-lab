@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const processButton = document.getElementById('processButton');
     const pixelateButton = document.getElementById('pixelateButton');
     const replaceWithNumbersButton = document.getElementById('replaceWithNumbersButton');
+    const removeBackgroundButton = document.getElementById('removeBackgroundButton');
     const downloadButton = document.getElementById('downloadButton');
     const setColorsButton = document.getElementById('setColorsButton');
     let originalImageData;
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let img = new Image();
 
     let colorPalette = [];
+    let cellNumbers = [];
 
     fileInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
@@ -29,7 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 processButton.removeAttribute('disabled');
                 pixelateButton.removeAttribute('disabled');
                 replaceWithNumbersButton.removeAttribute('disabled');
-                downloadButton.removeAttribute('disabled'); // Habilitar el botón de descarga
+                removeBackgroundButton.removeAttribute('disabled');
+                downloadButton.removeAttribute('disabled');
             };
             img.src = e.target.result;
         };
@@ -55,6 +58,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const cols = Math.floor(canvas.width / pixelSize);
         const rows = Math.floor(canvas.height / pixelSize);
         divideImage(cols, rows, currentImageData, pixelSize);
+    });
+
+    removeBackgroundButton.addEventListener('click', function () {
+        if (!currentImageData) return;
+        removeBackground(currentImageData);
     });
 
     downloadButton.addEventListener('click', downloadImage);
@@ -177,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ctx.stroke();
         }
 
+        cellNumbers = [];  // Reset cellNumbers array
         for (let i = 0; i < cols; i++) {
             for (let j = 0; j < rows; j++) {
                 const x = i * width;
@@ -185,14 +194,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 const color = getAverageColor(cellData.data);
                 const colorNumber = getColorNumber(color);
 
-                const fontSize = Math.min(width, height) * 0.4;
-                ctx.font = `${fontSize}px Arial`;
-                ctx.fillStyle = colorNumber === 0 ? 'white' : 'black';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(colorNumber, x + width / 2, y + height / 2);
+                cellNumbers.push({ x, y, width, height, number: colorNumber });
             }
         }
+
+        drawNumbers();
+    }
+
+    function drawNumbers() {
+        cellNumbers.forEach(cell => {
+            const { x, y, width, height, number } = cell;
+            const fontSize = Math.min(width, height) * 0.4;
+            ctx.font = `${fontSize}px Arial`;
+            ctx.fillStyle = number === 0 ? 'white' : 'black';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(number, x + width / 2, y + height / 2);
+        });
     }
 
     function getAverageColor(data) {
@@ -216,10 +234,52 @@ document.addEventListener('DOMContentLoaded', function () {
         return { r, g, b };
     }
 
+    function removeBackground(imageData) {
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const alpha = data[i + 3];
+
+            if (alpha !== 0) {
+                data[i + 3] = 0; // Hacer transparente
+            }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        drawGrid(); // Re-aplicar las grillas después de eliminar el fondo
+        drawNumbers(); // Re-aplicar los números después de eliminar el fondo
+    }
+
     function downloadImage() {
         const link = document.createElement('a');
-        link.download = 'image_with_grid.png';
+        link.download = 'imagen_procesada.png';
         link.href = canvas.toDataURL();
         link.click();
+    }
+
+    function drawGrid() {
+        const pixelSize = parseInt(pixelSizeInput.value);
+        const cols = Math.floor(canvas.width / pixelSize);
+        const rows = Math.floor(canvas.height / pixelSize);
+
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 1;
+
+        for (let i = 0; i <= cols; i++) {
+            ctx.beginPath();
+            ctx.moveTo(i * pixelSize, 0);
+            ctx.lineTo(i * pixelSize, canvas.height);
+            ctx.stroke();
+        }
+
+        for (let j = 0; j <= rows; j++) {
+            ctx.beginPath();
+            ctx.moveTo(0, j * pixelSize);
+            ctx.lineTo(canvas.width, j * pixelSize);
+            ctx.stroke();
+        }
     }
 });

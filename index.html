@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <title>Pixelar Imagen y agregar números</title>
+    <title>Pixel Pro!</title>
     <style>
         #canvas {
             border: 1px solid black;
@@ -18,115 +18,107 @@
 
 <body>
     <header>
-        <h1>Pixel Lab</h1>
+        <h1>Pixel Pro!</h1>
     </header>
     <main>
         <div>
+            <div class="colors">
+                <h3>Definir Colores</h3>
+                <div id="colorInputs">
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 1:</label>
+                        <input type="text" id="colorInput1" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput2">Color 2:</label>
+                        <input type="text" id="colorInput2" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 3:</label>
+                        <input type="text" id="colorInput3" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 4:</label>
+                        <input type="text" id="colorInput4" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 5:</label>
+                        <input type="text" id="colorInput5" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 6:</label>
+                        <input type="text" id="colorInput6" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 7:</label>
+                        <input type="text" id="colorInput7" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper"><label for="colorInput1">Color 8:</label>
+                        <input type="text" id="colorInput8" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 9:</label>
+                        <input type="text" id="colorInput9" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 10:</label>
+                        <input type="text" id="colorInput10" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 11:</label>
+                        <input type="text" id="colorInput11" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 12:</label>
+                        <input type="text" id="colorInput12" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 13:</label>
+                        <input type="text" id="colorInput13" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 14:</label>
+                        <input type="text" id="colorInput14" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper">
+                        <label for="colorInput1">Color 15:</label>
+                        <input type="text" id="colorInput15" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                    <div class="colorInputWrapper"><label for="colorInput16">Color 16:</label>
+                        <input type="text" id="colorInput16" placeholder="R=255 G=255 B=255"><br>
+                    </div>
+    
+                </div>
+                <button id="setColorsButton">Establecer Colores</button>
+            </div>
+
             <input type="file" id="fileInput" />
+            
             <label for="pixelSize">Tamaño de píxel:</label>
             <input type="number" id="pixelSize" name="pixelSize" min="1" value="10">
             <button id="processButton" disabled>Procesar</button>
             <button id="pixelateButton" disabled>Pixelar</button>
             <button id="replaceWithNumbersButton" disabled>Reemplazar con Números</button>
+            <button id="removeBackgroundButton" disabled>Eliminar Fondo</button>
             <button id="downloadButton" disabled>Descargar Imagen</button>
             <canvas id="canvas"></canvas>
         </div>
-        <div>
-            <h3>Definir Colores</h3>
-            <div id="colorInputs">
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 1:</label>
-                    <input type="text" id="colorInput1" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput2">Color 2:</label>
-                    <input type="text" id="colorInput2" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 3:</label>
-                    <input type="text" id="colorInput3" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 4:</label>
-                    <input type="text" id="colorInput4" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 5:</label>
-                    <input type="text" id="colorInput5" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 6:</label>
-                    <input type="text" id="colorInput6" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 7:</label>
-                    <input type="text" id="colorInput7" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper"><label for="colorInput1">Color 8:</label>
-                    <input type="text" id="colorInput8" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 9:</label>
-                    <input type="text" id="colorInput9" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 10:</label>
-                    <input type="text" id="colorInput10" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 11:</label>
-                    <input type="text" id="colorInput11" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 12:</label>
-                    <input type="text" id="colorInput12" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 13:</label>
-                    <input type="text" id="colorInput13" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 14:</label>
-                    <input type="text" id="colorInput14" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper">
-                    <label for="colorInput1">Color 15:</label>
-                    <input type="text" id="colorInput15" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-                <div class="colorInputWrapper"><label for="colorInput16">Color 16:</label>
-                    <input type="text" id="colorInput16" placeholder="R=255 G=255 B=255"><br>
-                </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
-            <button id="setColorsButton">Establecer Colores</button>
-        </div>
+        
 
     </main>
     <script src="main.js"></script>
